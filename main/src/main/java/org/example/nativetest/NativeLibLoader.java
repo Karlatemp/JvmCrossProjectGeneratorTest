@@ -1,14 +1,30 @@
 package org.example.nativetest;
 
 import java.io.*;
+import java.net.URI;
+import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Locale;
 
 class NativeLibLoader {
     private static final String LIB_LOC = "META-INF/native/project/";
     private static final String LIB_NAME = "testing";
-    private static final String LOCAL_LIB_PATH_PREFIX = "native/cmake-build-debug/" + LIB_NAME + ".";
+    private static final String LOCAL_LIB_PATH_PREFIX = "native/cmake-build-debug/lib" + LIB_NAME + ".";
     private static final String PROJECT_NAME = "Test";
+
+    private static File findRuningLoc() {
+        URL loc = NativeLibLoader.class.getResource("NativeLibLoader.class");
+        if (loc == null || !loc.getProtocol().equals("file")) return null;
+        File file = Paths.get(URI.create(loc.toString())).toFile();
+        long pcount = NativeLibLoader.class.getName().chars().filter(it -> it == '.').count();
+        pcount += 5; // build/class/java/main
+        pcount++; // Will insert in template
+        while (pcount-- > 0) {
+            file = file.getParentFile();
+        }
+        return file;
+    }
 
     private static String trimOsName(String os) {
         String osL = os.toLowerCase(Locale.ROOT);
@@ -42,10 +58,14 @@ class NativeLibLoader {
     private static void load0() {
         String osName = trimOsName(System.getProperty("os.name"));
         String extName = extName(osName);
-        File libLocal = new File(LOCAL_LIB_PATH_PREFIX + extName);
-        if (libLocal.isFile()) {
-            System.load(libLocal.getAbsolutePath());
-            return;
+
+        File fLocal = findRuningLoc();
+        if (fLocal != null) {
+            File libLocal = new File(fLocal, LOCAL_LIB_PATH_PREFIX + extName);
+            if (libLocal.isFile()) {
+                System.load(libLocal.getAbsolutePath());
+                return;
+            }
         }
 
         String osArch = System.getProperty("os.arch");

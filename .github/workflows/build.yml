@@ -35,7 +35,7 @@ jobs:
           chmod +x .scripts/build.sh
           chmod +x .scripts/setup_docker.sh
       - name: Build java
-        run: ./gradlew build
+        run: ./gradlew assemble
       - name: Build native (${{ matrix.cross }})
         run: .scripts/setup_docker.sh
         env:
@@ -49,6 +49,9 @@ jobs:
       - run: |
           ls -R native
           exit 0
+      - name: RunNative
+        if: "${{ matrix.cross == 'linux-x64' }}"
+        run: ./gradlew build --info
   build-macos:
     runs-on: macos-latest
     name: Build on MacOS
@@ -64,7 +67,7 @@ jobs:
           chmod +x .scripts/build.sh
           chmod +x .scripts/setup_docker.sh
       - name: Build java
-        run: ./gradlew build
+        run: ./gradlew assemble
       - name: Build native
         run: .scripts/build.sh
         env:
@@ -75,6 +78,8 @@ jobs:
           name: macos-x86_64
           path: |
             native/cmake-build-debug/bin
+      - name: RunNative
+        run: ./gradlew build --info
 
   upload-release-assets:
     runs-on: ubuntu-latest

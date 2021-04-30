@@ -56,7 +56,7 @@ jobs:
         run: ./gradlew build --info
   build-macos:
     runs-on: macos-latest
-    name: Build on MacOS
+    name: Build on mac-os
     steps:
       - uses: actions/checkout@v2
       - name: Setup JDK 8
@@ -98,5 +98,21 @@ jobs:
           mkdir -p temp/archives
       - uses: actions/download-artifact@v2
         with:
-          path: temp/artifacts
-      - run: ls -R
+          path: temp/archives
+      - name: Build Packed Jar
+        run: ./gradlew :ci-release-helper:buildPackedJar --info
+      - name: Upload Packed Jar
+        uses: actions/upload-artifact@v2
+        with:
+          name: finally-jar
+          path: ci-release-helper/build/libs/packed-jar.jar
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        if: "${{ github.event_name == 'release' }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ci-release-helper/build/libs/packed-jar.jar
+          asset_name: Test-${{ github.event.release.name }}.jar
+          asset_content_type: application/jar

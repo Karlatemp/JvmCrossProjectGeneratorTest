@@ -8,3 +8,5 @@ def includeProject = { String name, String path ->
 
 includeProject(":main", "main")
 
+
+include(":ci-release-helper")

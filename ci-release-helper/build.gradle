@@ -1,0 +1,42 @@
+plugins {
+    id "java"
+}
+
+project(':main').afterEvaluate {
+
+task buildPackedJar(type: Jar) {
+    archiveFileName.set('packed-jar.jar')
+
+    def jarTask = project(':main').tasks.jar
+    dependsOn(jarTask)
+    from(zipTree(jarTask.archiveFile.get().asFile))
+
+    def getExtName = { String name ->
+        def i = name.lastIndexOf('.')
+        if (i == -1) return ''
+        return name.substring(i)
+    }
+    def arts = rootProject.file('temp/archives')
+    if (arts.isDirectory()) {
+        def subsystems = arts.listFiles()
+        if (subsystems != null) {
+            for (File subsystem : subsystems) {
+                def libs = subsystem.listFiles()
+                if (libs != null && libs.length == 1) {
+                    def libS = libs[0]
+                    def libRenamed = new File(subsystem, 'testing-' + subsystem.name + getExtName(libs[0].name))
+                    if (libS.name != libRenamed.name) {
+                        libS.renameTo(libRenamed)
+                    }
+
+                    from(libRenamed) {
+                        into 'META-INF/native/project/'
+                    }
+                }
+            }
+        }
+    }
+}
+
+}
+

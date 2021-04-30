@@ -3,3 +3,4 @@
 *.class
 *.zip
 /native/cmake-build-debug
+build/

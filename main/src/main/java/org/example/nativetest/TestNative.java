@@ -6,4 +6,7 @@ public class TestNative {
     static {
         NativeLibLoader.load();
     }
+
+    public static void main(String[] args) {
+    }
 }

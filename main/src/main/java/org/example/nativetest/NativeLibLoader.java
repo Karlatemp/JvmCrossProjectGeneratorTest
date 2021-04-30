@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.util.Locale;
 
 class NativeLibLoader {
+    private static native void placeholder();
+
     private static final String LIB_LOC = "META-INF/native/project/";
     private static final String LIB_NAME = "testing";
     private static final String LOCAL_LIB_PATH_PREFIX = "native/cmake-build-debug/" + LIB_NAME + ".";

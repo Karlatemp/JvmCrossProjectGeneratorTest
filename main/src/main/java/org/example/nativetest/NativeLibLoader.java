@@ -28,7 +28,7 @@ class NativeLibLoader {
 
     private static String trimOsName(String os) {
         String osL = os.toLowerCase(Locale.ROOT);
-        if (osL.startsWith("windows ")) return "win";
+        if (osL.startsWith("windows ")) return "windows";
         if (osL.startsWith("mac os")) return "macos";
         if (osL.startsWith("linux")) return "linux";
         return os;
@@ -36,7 +36,7 @@ class NativeLibLoader {
 
     private static String extName(String os) {
         switch (os) {
-            case "win":
+            case "windows":
                 return "dll";
             case "macos":
                 return "dylib";
@@ -69,9 +69,10 @@ class NativeLibLoader {
         }
 
         String osArch = System.getProperty("os.arch");
-        try (InputStream libRes = NativeLibLoader.class.getResourceAsStream("/" + LIB_LOC + LIB_NAME + "-" + osName + "-" + osArch + "." + extName)) {
+        String path = "/" + LIB_LOC + LIB_NAME + "-" + osName + "-" + osArch + "." + extName;
+        try (InputStream libRes = NativeLibLoader.class.getResourceAsStream(path)) {
             if (libRes == null) {
-                throw new UnsupportedOperationException("`" + PROJECT_NAME + "` is not support on " + osName + " " + osArch);
+                throw new UnsupportedOperationException("`" + PROJECT_NAME + "` is not supported on " + osName + " " + osArch + " because `" + path + "` not found.");
             }
             File file = Files.createTempFile(LIB_NAME, extName).toFile();
             file.deleteOnExit();

@@ -1,4 +1,4 @@
-package org.example.native;
+package org.example.nativetest;
 
 import java.io.*;
 import java.nio.file.Files;

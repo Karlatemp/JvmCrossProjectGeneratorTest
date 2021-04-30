@@ -2,8 +2,8 @@ plugins {
     id "java"
 }
 
-afterEvaluate {
-    allprojects {
+allprojects {
+    afterEvaluate {
         group = "org.example.generated"
         version = "1.0.0"
 

@@ -2,7 +2,7 @@ rootProject.name = "Test"
 
 def includeProject = { String name, String path ->
     include(name)
-    project.projectDir = new File(rootDir, path)
+    project(name).projectDir = new File(rootDir, path)
 }
 
 

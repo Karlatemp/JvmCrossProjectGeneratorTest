@@ -24,7 +24,7 @@ jobs:
           - cross: windows-shared-x86
             artin: windows-x86
           - cross: windows-shared-x64
-            artin: windows-arm64
+            artin: windows-amd64
     steps:
       - uses: actions/checkout@v2
       - name: Setup JDK 8

@@ -18,7 +18,7 @@ jobs:
           - cross: linux-x86
             artin: linux-x86
           - cross: linux-x64
-            artin: linux-x64
+            artin: linux-amd64
           - cross: linux-arm64
             artin: linux-arm64
           - cross: windows-shared-x86

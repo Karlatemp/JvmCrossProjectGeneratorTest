@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 import java.util.Locale;
 
 class NativeLibLoader {
-    private static final String LIB_LOC = "META-INF/native/project/";
+    private static final String LIB_LOC = "META-INF/native/Test/";
     private static final String LIB_NAME = "testing";
     private static final String LOCAL_LIB_PATH_PREFIX = "native/cmake-build-debug/lib" + LIB_NAME + ".";
     private static final String PROJECT_NAME = "Test";
@@ -74,7 +74,7 @@ class NativeLibLoader {
             if (libRes == null) {
                 throw new UnsupportedOperationException("`" + PROJECT_NAME + "` is not supported on " + osName + " " + osArch + " because `" + path + "` not found.");
             }
-            File file = Files.createTempFile(LIB_NAME, extName).toFile();
+            File file = Files.createTempFile(LIB_NAME, "." + extName).toFile();
             file.deleteOnExit();
             try (OutputStream extract = new BufferedOutputStream(new FileOutputStream(file))) {
                 transfer(libRes, extract);

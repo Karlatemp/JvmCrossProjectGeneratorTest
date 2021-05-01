@@ -4,3 +4,4 @@
 *.zip
 /native/cmake-build-debug
 build/
+/temp/archives

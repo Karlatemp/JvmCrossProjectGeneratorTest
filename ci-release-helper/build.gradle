@@ -30,7 +30,7 @@ task buildPackedJar(type: Jar) {
                     }
 
                     from(libRenamed) {
-                        into 'META-INF/native/project/'
+                        into 'META-INF/native/Test/'
                     }
                 }
             }
